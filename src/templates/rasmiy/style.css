@@ -1,0 +1,53 @@
+/* "Rasmiy" shabloni: faqat .tpl-rasmiy ostidagi qoidalar (umumiy asos — styles/preview.css) */
+/* Sarlavha: 12 ustunli qator — chapda 3 ustun 3×4 rasm, qolgan 9 ustunda markazda ism va lavozim */
+.tpl-rasmiy .pv-header {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 5mm;
+  row-gap: 4mm;
+  align-items: stretch;
+  /* Chiziqsiz sarlavha: keyingi bo'limgacha masofa bo'limlar orasidagidek (7mm) */
+  padding-bottom: 0;
+}
+.tpl-rasmiy .pv-header .pv-photo {
+  grid-column: 1 / span 3;
+  grid-row: 1;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  border-radius: 0;
+  object-fit: cover;
+}
+.tpl-rasmiy .pv-header-text {
+  grid-column: 4 / span 9;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.tpl-rasmiy .pv-name { font-size: 18pt; }
+.tpl-rasmiy .pv-job { font-size: 12pt; color: var(--page-muted); }
+/* Ko'nikmalar va tillar bitta ustunda: chapda nomi, o'ngda darajasi (kontaktlar kabi) */
+.tpl-rasmiy .pv-rated { margin-bottom: 1.5mm; }
+.tpl-rasmiy .pv-rated-name { font-weight: 700; }
+/*
+ * Hujjat nomi bo'lsa: ustun tepasidan nomgacha, nomdan ismgacha va ism (lavozim)dan ustun
+ * pastigacha bo'lgan uchta masofa doim teng (1fr qatorlar), ustun balandligi qanday bo'lmasin.
+ * Lavozim ism bilan birga turadi.
+ */
+.tpl-rasmiy .pv-header-text.pv-with-doc-title {
+  display: grid;
+  grid-template-rows: 1fr auto 1fr auto auto 1fr;
+  justify-items: center;
+}
+.tpl-rasmiy .pv-header-text > .pv-doc-title { grid-row: 2; }
+.tpl-rasmiy .pv-header-text.pv-with-doc-title > .pv-name { grid-row: 4; }
+.tpl-rasmiy .pv-header-text.pv-with-doc-title > .pv-job { grid-row: 5; }
+.tpl-rasmiy .pv-doc-title {
+  margin: 0;
+  font-size: 16pt;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}

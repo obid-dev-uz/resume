@@ -1,0 +1,13 @@
+/* "Yon panelli" shabloni: faqat .tpl-sidebar ostidagi qoidalar (umumiy asos — styles/preview.css) */
+.tpl-sidebar .pv-side { background: var(--accent); color: #fff; }
+.tpl-sidebar .pv-side .pv-photo { display: block; margin: 0 auto 6mm; border: 3px solid rgba(255, 255, 255, 0.5); }
+.tpl-sidebar .pv-side .pv-name { font-size: 19pt; }
+.tpl-sidebar .pv-side .pv-job { opacity: 0.85; margin-bottom: 7mm !important; }
+.tpl-sidebar .pv-side .pv-title { color: #fff; border-color: rgba(255, 255, 255, 0.35); }
+.tpl-sidebar .pv-side .pv-level i { background: rgba(255, 255, 255, 0.3); }
+.tpl-sidebar .pv-side .pv-level i.on { background: #fff; }
+.tpl-sidebar .pv-side .pv-block-contacts .pv-contacts dt { display: none; }
+.tpl-sidebar .pv-side .pv-block-contacts .pv-contacts dd { margin-bottom: 4px; }
+
+/* Rangli fonda ko'k havola o'qilmaydi — matn rangi qoladi */
+.tpl-sidebar .pv-side a { color: inherit; }

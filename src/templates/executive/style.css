@@ -1,0 +1,24 @@
+/* "Ijrochi — bo'lim nomi chap ustunda" shabloni: faqat .tpl-executive ostidagi qoidalar (umumiy asos — styles/preview.css) */
+.tpl-executive .pv-header { border-bottom: 2px solid var(--page-text); }
+.tpl-executive .pv-name { font-size: 24pt; }
+.tpl-executive .pv-job { color: var(--accent); font-weight: 600; }
+.tpl-executive .pv-section {
+  display: grid;
+  grid-template-columns: 36mm 1fr;
+  column-gap: 6mm;
+  padding-top: 4mm;
+  margin-bottom: 4mm;
+  border-top: 1px solid #e3e6ea;
+}
+.tpl-executive .pv-section:first-child { border-top: none; padding-top: 0; }
+.tpl-executive .pv-title {
+  grid-column: 1;
+  grid-row: 1 / span 50;
+  margin: 0;
+  padding: 0;
+  border: none;
+  font-size: 9.5pt;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.tpl-executive .pv-section > :not(.pv-title) { grid-column: 2; }

@@ -1,0 +1,20 @@
+/* "Minimal (ATS) — qora-oq, rang ishlatilmaydi" shabloni: faqat .tpl-minimal ostidagi qoidalar (umumiy asos — styles/preview.css) */
+.tpl-minimal { --page-text: #111; --page-muted: #444; padding: 16mm 18mm; }
+.tpl-minimal .pv-header { justify-content: center; text-align: center; border-bottom: 1px solid #111; padding-bottom: 5mm; margin-bottom: 6mm; }
+.tpl-minimal .pv-name { font-size: 21pt; letter-spacing: 1.5px; text-transform: uppercase; }
+.tpl-minimal .pv-job { color: var(--page-muted); }
+.tpl-minimal .pv-title {
+  color: #111;
+  font-size: 10.5pt;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  border-bottom: 1px solid #111;
+}
+.tpl-minimal .pv-sub { font-style: normal; }
+/* ATS dasturlari grafikani o'qimaydi: daraja matn bilan */
+.tpl-minimal .pv-level { display: none; }
+.tpl-minimal .pv-level-text { display: inline; }
+
+/* Ko'nikma va tillar ikki ustunda — joy tejaladi */
+.tpl-minimal .pv-kind-rated { display: grid; grid-template-columns: 1fr 1fr; column-gap: 10mm; }
+.tpl-minimal .pv-kind-rated .pv-title { grid-column: 1 / -1; }

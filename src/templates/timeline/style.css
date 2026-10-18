@@ -1,0 +1,27 @@
+/* "Vaqt chizig'i" shabloni: faqat .tpl-timeline ostidagi qoidalar (umumiy asos — styles/preview.css) */
+.tpl-timeline .pv-header { border-bottom: 1px solid #d9dee5; border-bottom: 1px solid color-mix(in srgb, var(--accent) 30%, #fff); }
+.tpl-timeline .pv-name { color: var(--accent); }
+.tpl-timeline .pv-title { border-bottom: none; font-size: 13pt; }
+.tpl-timeline .pv-kind-timeline .pv-entry {
+  position: relative;
+  margin: 0 0 0 2mm;
+  padding: 0 0 4mm 7mm;
+  border-left: 2px solid #d9dee5; border-left: 2px solid color-mix(in srgb, var(--accent) 25%, #fff);
+}
+.tpl-timeline .pv-kind-timeline .pv-entry:last-child { border-left-color: transparent; padding-bottom: 0; }
+.tpl-timeline .pv-kind-timeline .pv-entry::before {
+  content: "";
+  position: absolute;
+  left: -8px;
+  top: 3px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--accent);
+}
+.tpl-timeline .pv-period { color: var(--accent); font-weight: 600; }
+
+/* Ko'nikma va tillar ikki ustunda — joy tejaladi */
+.tpl-timeline .pv-kind-rated { display: grid; grid-template-columns: 1fr 1fr; column-gap: 10mm; }
+.tpl-timeline .pv-kind-rated .pv-title { grid-column: 1 / -1; }

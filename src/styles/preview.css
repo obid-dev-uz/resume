@@ -1,0 +1,280 @@
+/*
+ * Barcha shablonlar uchun umumiy asos: A4 sahifa, rezyume elementlari (.pv-*), ikki/bir ustunli
+ * tuzilma, chop etish va sahifalash. Bu yerda `.tpl-<id>` qoidasi YOZILMAYDI — shablonga xos
+ * hamma narsa src/templates/<id>/style.css da. Bu fayldagi o'zgarish hamma shablonga ta'sir qiladi.
+ */
+
+/* ---- A4 sahifa preview ---- */
+.preview-scroll {
+  flex: 1;
+  overflow: auto;
+  padding: 20px;
+}
+
+.page {
+  --side-width: 34%;
+  --page-text: #1f2833;
+  --page-muted: #5f6b7a;
+  --level-off: #d9dee5;
+
+  zoom: var(--scale, 1);
+  display: flex;
+  flex-direction: column;
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  background: #fff;
+  color: var(--page-text);
+  box-shadow: 0 2px 14px rgba(15, 25, 40, 0.14);
+  font-size: 10pt;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+.page p { margin: 0; }
+.page ul { margin: 2px 0 0; padding-left: 16px; }
+.page li { margin: 1px 0; }
+
+.pv-photo { width: 34mm; height: 34mm; border-radius: 50%; object-fit: cover; }
+.pv-name { font-size: 22pt; line-height: 1.15; font-weight: 700; }
+.pv-job { font-size: 12pt; margin-top: 2px !important; }
+
+.pv-section { margin-bottom: 7mm; }
+.pv-title {
+  font-size: 12.5pt;
+  font-weight: 700;
+  color: var(--accent);
+  padding-bottom: 3px;
+  margin-bottom: 8px;
+  border-bottom: 1.5px solid #d9dee5; border-bottom: 1.5px solid color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+.pv-entry { margin-bottom: 4mm; break-inside: avoid; }
+.pv-entry-head { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+.pv-period { flex: none; font-size: 9pt; color: var(--page-muted); white-space: nowrap; }
+.pv-sub { color: var(--page-muted); font-style: italic; }
+.pv-desc { margin-top: 3px; }
+.pv-desc p + p { margin-top: 3px; }
+
+.pv-rated { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 5px; break-inside: avoid; }
+.pv-level { display: inline-flex; gap: 3px; flex: none; }
+.pv-level i { width: 7px; height: 7px; border-radius: 50%; background: var(--level-off); }
+.pv-level i.on { background: var(--accent); }
+
+.pv-list { list-style: none; padding: 0 !important; }
+.pv-list li { margin-bottom: 3px; }
+
+.pv-empty { color: var(--page-muted); font-style: italic; }
+
+/* ================= Tuzilma (TemplateDef: layout, side — src/templates) ================= */
+.pv-body { flex: 1; }
+.pv-side, .pv-main { min-width: 0; }
+
+.pv-header { display: flex; align-items: center; gap: 7mm; }
+.pv-header .pv-photo { width: 30mm; height: 30mm; flex: none; }
+.pv-header-text { min-width: 0; }
+
+.pv-contacts, .pv-links { margin: 0; }
+.page .app-icon { width: 1.05em; height: 1.05em; margin-right: 4px; vertical-align: -0.17em; }
+.pv-contacts dt, .pv-links dt { font-weight: 700; font-size: 9pt; opacity: 0.8; }
+.pv-contacts dd, .pv-links dd { margin: 0 0 6px; white-space: pre-line; }
+
+.pv-inline-contacts { margin-top: 6px !important; font-size: 9.5pt; color: var(--page-muted); }
+.pv-inline-contacts span:not(:last-child)::after { content: "  ·  "; white-space: pre; }
+.pv-inline-contacts + .pv-inline-contacts { margin-top: 2px !important; }
+
+/* Ikki ustun: yon ustun fon bilan butun sahifa (va keyingi sahifalar) bo'ylab cho'ziladi */
+.layout-sidebar .pv-body { display: grid; grid-template-columns: var(--side-width) 1fr; }
+.layout-sidebar.side-right .pv-body { grid-template-columns: 1fr var(--side-width); }
+.layout-sidebar.side-right .pv-side { order: 2; }
+.layout-sidebar .pv-side { padding: 12mm 7mm; }
+.layout-sidebar .pv-main { padding: 12mm 10mm; }
+
+/* Bir ustun */
+.layout-single { padding: 14mm 16mm; }
+.layout-single .pv-header { padding-bottom: 6mm; margin-bottom: 7mm; }
+
+.pv-level-text { display: none; color: var(--page-muted); font-size: 9pt; }
+
+/* Ikki ustunli "kalit — qiymat" jadvali */
+.pv-fields-grid { display: grid; grid-template-columns: 1fr 1fr; column-gap: 8mm; row-gap: 3mm; }
+.pv-fields-stack { grid-template-columns: 1fr; }
+
+/* Qatorlar: chapda qalin kalit, o'ngda qiymat (Rasmiy: kontaktlar) */
+.pv-fr-item { display: flex; justify-content: space-between; align-items: baseline; gap: 6mm; margin-bottom: 1.5mm; break-inside: avoid; }
+.pv-fr-item:last-child { margin-bottom: 0; }
+.pv-fr-value { text-align: right; white-space: pre-line; min-width: 0; }
+.pv-fr-note { margin-top: 1.5mm !important; white-space: pre-line; }
+.pv-check { font-weight: 700; }
+
+/*
+ * Ustunlar chegarasi: bo'shliq o'rtasidagi ko'rinmas tutqich, ustiga kelinganda chiziq chiqadi.
+ * Chop etishda (no-print) va eskizlarda (pointer-events: none) ishlamaydi.
+ */
+.pv-fields-grid.resizable { position: relative; --fg-gap: 8mm; }
+.pv-split-handle {
+  position: absolute;
+  top: -1mm;
+  bottom: -1mm;
+  left: calc((100% - var(--fg-gap)) * var(--split) / 100 + var(--fg-gap) / 2);
+  width: 3mm;
+  transform: translateX(-50%);
+  cursor: col-resize;
+  touch-action: none;
+  outline: none;
+}
+.pv-split-handle::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  border-left: 1px dashed var(--accent, #2f5d8a);
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+.pv-fields-grid.resizable:hover .pv-split-handle::after { opacity: 0.45; }
+.pv-split-handle:hover::after,
+.pv-split-handle:focus-visible::after,
+.pv-fields-grid.dragging .pv-split-handle::after { opacity: 1; border-left-style: solid; }
+.pv-fields-grid.dragging { cursor: col-resize; user-select: none; }
+.pv-fg-item { break-inside: avoid; min-width: 0; }
+.pv-fg-key { font-weight: 700; }
+/* Qiymatdagi Enter (yangi qator) saqlanadi */
+.pv-fg-value { color: var(--page-text); white-space: pre-line; }
+
+/* ---- Chop etish / PDF ---- */
+@page {
+  size: A4;
+  margin: 0;
+}
+
+@media print {
+  /* :root ilova fonini beradi — chop etishda uni ham oq qilish kerak */
+  :root, html, body, #app { height: auto; background: #fff !important; }
+  .no-print { display: none !important; }
+  .editor-layout, .editor-body, .preview-pane {
+    display: block;
+    height: auto;
+    border: 0;
+    background: #fff;
+    overflow: visible;
+  }
+  /* Preview ekranda yashirilgan bo'lsa ham PDF shu sahifadan chiqadi */
+  .preview-hidden .preview-pane,
+  .preview-pane > .preview-scroll {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    visibility: visible !important;
+  }
+  /* PDF har doim rezyumening o'zi: JSON rejimida ham A4 sahifa chop etiladi */
+  .json-view { display: none !important; }
+  .preview-pane > .preview-scroll { display: block !important; }
+  .preview-scroll { padding: 0; overflow: visible; }
+  /* Har bir varaq — bitta qog'oz sahifasi; sahifalashni ilovaning o'zi qilgan (src/lib/paginate.ts) */
+  .page-measure, .pv-page-no { display: none !important; }
+  /* !important: ekran qoidasi (.pages { display: flex; gap }) fayl oxirroq qismida turadi */
+  .pages { display: block !important; gap: 0 !important; }
+  /*
+   * Varaq qog'ozdan sal pastroq: WebKitGTK (Tauri) sahifa balandligini 297mm dan bir oz kichik
+   * hisoblaydi va aniq 297mm varaq keyingi sahifaga toshib, oxirida bo'sh varaq paydo bo'lardi.
+   * Kesilgan 1mm — pastki bo'sh maydon, mazmunga tegmaydi.
+   */
+  .page-frame {
+    width: auto !important;
+    height: auto !important;
+    break-after: page;
+  }
+  .page-frame:last-child { break-after: auto; }
+  .page-frame > .page-sheet {
+    zoom: 1 !important;
+    transform: none !important;
+    height: 296mm;
+    min-height: 0;
+    margin: 0;
+    box-shadow: none;
+  }
+}
+
+/* ---- Galereyadagi kichik rasm: faqat birinchi sahifa ---- */
+.preview-thumb { padding: 0; overflow: hidden; pointer-events: none; }
+.preview-thumb .page { height: 297mm; overflow: hidden; box-shadow: none; }
+
+/* ---- Rezyumedagi havolalar: PDF'da ham bosiladi ---- */
+/* Chiziqsiz; havola ekanini matn rangiga aralashtirilgan xira ko'k bildiradi (yorqin ko'k emas) */
+.page a {
+  color: #1e4c8e; color: color-mix(in srgb, #1d5fbf 65%, var(--page-text));
+  text-decoration: none;
+}
+.page a:hover { text-decoration: underline; }
+
+/* ---- Sahifalash (Word'dagidek alohida A4 varaqlar) ---- */
+/* O'lchov varag'i: ko'rinmaydi, lekin joylashuvi hisoblanadi (display: none bo'lsa o'lchab bo'lmaydi) */
+.page-measure {
+  position: fixed;
+  top: 0;
+  left: -10000px;
+  visibility: hidden;
+  pointer-events: none;
+}
+.pages { display: flex; flex-direction: column; gap: 18px; }
+.page-sheet { position: relative; height: 297mm; overflow: hidden; }
+/*
+ * Varaq ramkasi: kichraytirilgan varaq egallaydigan joy. Varaqning o'zi transform bilan
+ * kichraytiriladi (zoom emas) — joylashuvi o'lchov varag'i (.page-measure) bilan bir xil qoladi,
+ * shuning uchun varaq chegarasi aynan yozuvlar orasiga tushadi (src/lib/paginate.ts).
+ */
+.page-frame {
+  flex: none;
+  width: calc(210mm * var(--scale, 1));
+  height: calc(297mm * var(--scale, 1));
+  margin: 0 auto;
+}
+.page-frame > .page-sheet {
+  zoom: 1;
+  margin: 0;
+  transform: scale(var(--scale, 1));
+  transform-origin: top left;
+}
+/* Ustun oynasi: varaqqa tushgan mazmun oralig'idan tashqarisi ko'rinmaydi */
+.pv-window { overflow: hidden; }
+.pv-page-no {
+  position: absolute;
+  right: 7mm;
+  bottom: 4mm;
+  font: 500 8pt Inter, system-ui, sans-serif;
+  color: #9aa3ae;
+}
+
+/* ---- Yaqin qarindoshlari: rasmiy ma'lumotnoma jadvali ---- */
+.pv-rel {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 8.5pt;
+  line-height: 1.3;
+}
+.pv-rel th, .pv-rel td {
+  padding: 3px 4px;
+  border: 1px solid #555;
+  text-align: center;
+  vertical-align: middle;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+.pv-rel thead th { font-weight: 700; background: #f3f5f8; background: color-mix(in srgb, var(--accent) 8%, #fff); }
+/* Sarlavhalar so'z o'rtasidan bo'linmasin ("Qarindoshlig-i") */
+.pv-rel thead th { overflow-wrap: normal; word-break: normal; hyphens: manual; }
+.pv-rel tbody th { font-weight: 700; }
+/* 7 ustun: qarindoshligi, F.I.Sh., tug'ilgan sanasi, tug'ilgan joyi, ish joyi, lavozimi, turar joyi */
+.pv-rel thead th:nth-child(1) { width: 12%; }
+.pv-rel thead th:nth-child(2) { width: 17%; }
+.pv-rel thead th:nth-child(3) { width: 9%; }
+.pv-rel thead th:nth-child(4) { width: 15%; }
+.pv-rel thead th:nth-child(5) { width: 16%; }
+.pv-rel thead th:nth-child(6) { width: 14%; }
+.pv-rel thead th:nth-child(7) { width: 17%; }
+.pv-rel tr { break-inside: avoid; }

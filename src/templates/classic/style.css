@@ -1,0 +1,8 @@
+/* "Klassik" shabloni: faqat .tpl-classic ostidagi qoidalar (umumiy asos — styles/preview.css) */
+.tpl-classic .pv-header { border-bottom: 3px solid var(--accent); }
+.tpl-classic .pv-name { color: var(--accent); }
+.tpl-classic .pv-job { color: var(--page-muted); }
+
+/* Ko'nikma va tillar ikki ustunda — joy tejaladi */
+.tpl-classic .pv-kind-rated { display: grid; grid-template-columns: 1fr 1fr; column-gap: 10mm; }
+.tpl-classic .pv-kind-rated .pv-title { grid-column: 1 / -1; }

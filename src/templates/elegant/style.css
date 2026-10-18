@@ -1,0 +1,34 @@
+/* "Nafis" shabloni: faqat .tpl-elegant ostidagi qoidalar (umumiy asos — styles/preview.css) */
+.tpl-elegant { --side-width: 31%; }
+.tpl-elegant .pv-header {
+  margin: 0 12mm;
+  padding: 14mm 0 8mm;
+  border-bottom: 1px solid #d9dee5; border-bottom: 1px solid color-mix(in srgb, var(--accent) 40%, #fff);
+}
+.tpl-elegant .pv-header .pv-photo { width: 26mm; height: 26mm; }
+.tpl-elegant .pv-name {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  font-size: 25pt;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.tpl-elegant .pv-job { font-size: 10pt; letter-spacing: 2px; text-transform: uppercase; color: var(--page-muted); }
+.tpl-elegant .pv-title {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  font-size: 13pt;
+  letter-spacing: 0.5px;
+  border-bottom: none;
+}
+.tpl-elegant .pv-title::after {
+  content: "";
+  display: block;
+  width: 24px;
+  height: 1.5px;
+  margin-top: 4px;
+  background: var(--accent);
+}
+.tpl-elegant .pv-side { padding: 8mm 12mm 12mm 7mm; border-left: 1px solid #e6e8ec; }
+.tpl-elegant .pv-main { padding: 8mm 8mm 12mm 12mm; }

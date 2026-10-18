@@ -1,0 +1,450 @@
+/*
+ * Ilova (UI) stillari: Tailwind CSS. Komponentlar ko'rinishi asosan shablondagi utility klasslarda,
+ * bu yerda faqat tokenlar, umumiy primitivlar (.btn, .card, .field...) va utility bilan yozib
+ * bo'lmaydigan holatlar (::after, ::backdrop, animatsiya, ota klassga bog'liq holat).
+ *
+ * Preflight (Tailwind reset) ULANMAGAN: u ro'yxat belgilarini, rasm va jadvallarni qayta o'rnatadi
+ * va A4 rezyumeni (preview.css, src/templates) buzadi. Rezyume stillari layer'siz — ular doim ustun.
+ * Rezyumeni chizuvchi Preview*.vue komponentlarida Tailwind klasslari ishlatilmaydi.
+ */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+
+/*
+ * Tor ekran variantlari. `screen` — chop etishga (PDF) ta'sir qilmaydi: A4 qog'oz kengligi
+ * ~800px, oddiy max-width bo'lsa mobil qoidalar PDF'ga ham tushardi.
+ */
+@custom-variant narrow (@media screen and (max-width: 900px));
+@custom-variant phone (@media screen and (max-width: 600px));
+
+/*
+ * O'lchamlar px'da: ilovada `:root { font-size: 14px }`, Tailwind standartlari esa rem'da
+ * (1rem = 14px bo'lib, hammasi 12.5% kichrayib qolardi). Shrift o'lchamlari qator balandligisiz —
+ * u avvalgidek meros bo'lib qoladi (line-height: 1.45); kerak joyda leading-* bilan beriladi.
+ */
+@theme {
+  --spacing: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --text-*: initial;
+  --text-xs: 12px;
+  --text-label: 12.5px;
+  --text-sm: 14px;
+  --text-base: 16px;
+  --text-lg: 18px;
+  --text-xl: 20px;
+  --text-4xl: 36px;
+  --font-mono: ui-monospace, "JetBrains Mono", "DejaVu Sans Mono", Menlo, Consolas, monospace;
+}
+
+/* Ranglar :root o'zgaruvchilaridan — qorong'i rejimda o'zlari almashadi */
+@theme inline {
+  --color-app: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--border);
+  --color-fg: var(--text);
+  --color-muted: var(--muted);
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-danger: var(--danger);
+  --color-ok: var(--ok);
+  /*
+   * Shaffof va aralash ranglar color-mix() SIZ: u Chrome 111+ da ishlaydi, Android 8/9 WebView
+   * (Chrome 101) esa uni tushunmaydi — Tailwind'ning `bg-brand/12` zaxirasi to'liq (shaffofsiz)
+   * rang bo'lib, fon to'q ko'k chiqardi. Shuning uchun: rgb(kanallar / alfa) va oldindan
+   * hisoblangan rang. Qoida: ilova UI'da `rang/NN` modifikatori ishlatilmaydi — shu tokenlar.
+   */
+  --color-head: var(--head);
+  --color-brand-faint: rgb(var(--brand-rgb) / 0.05);
+  --color-brand-soft: rgb(var(--brand-rgb) / 0.12);
+  --color-brand-line: rgb(var(--brand-rgb) / 0.25);
+  --color-brand-half: rgb(var(--brand-rgb) / 0.5);
+  --color-danger-soft: rgb(var(--danger-rgb) / 0.14);
+  --color-ok-soft: rgb(var(--ok-rgb) / 0.14);
+  --radius-card: var(--radius);
+  --shadow-pop: 0 8px 24px rgba(15, 25, 40, 0.16);
+  --shadow-float: 0 12px 32px rgba(15, 25, 40, 0.22);
+}
+
+:root {
+  --bg: #f3f5f8;
+  --surface: #ffffff;
+  --surface-2: #f6f8fb;
+  --border: #dde3ea;
+  --text: #1c2430;
+  --muted: #677385;
+  --brand: #2f6fed;
+  --brand-hover: #245bd0;
+  --danger: #d0453a;
+  --ok: #1f8a4c;
+  /* Yuqoridagi ranglarning RGB kanallari — shaffof tokenlar uchun (@theme) */
+  --brand-rgb: 47 111 237;
+  --danger-rgb: 208 69 58;
+  --ok-rgb: 31 138 76;
+  /* Muharrir sarlavhasi foni: brand 8% + surface (oldindan hisoblangan) */
+  --head: #eef4fe;
+  --radius: 10px;
+
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14181f;
+    --surface: #1c222b;
+    --surface-2: #232a35;
+    --border: #313a47;
+    --text: #e6eaf0;
+    --muted: #93a0b2;
+    --head: #1e283b;
+  }
+}
+
+/* ================= Asos (preflight o'rniga, minimal) ================= */
+@layer base {
+  * { box-sizing: border-box; }
+  html, body, #app { margin: 0; height: 100%; }
+  body { background: var(--bg); }
+  h1, h2, h3 { margin: 0; }
+
+  input, select, textarea, button { font: inherit; color: inherit; }
+
+  input:not([type="checkbox"]):not([type="radio"]):not([type="color"]), select, textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface-2);
+    outline: none;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--brand);
+    background: var(--surface);
+  }
+  input:disabled, textarea:disabled { opacity: 0.5; }
+  textarea { resize: vertical; min-height: 60px; }
+  textarea:disabled { cursor: not-allowed; }
+}
+
+/* ================= Umumiy primitivlar ================= */
+@layer components {
+  /* ---- Tugmalar ---- */
+  .btn {
+    @apply inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-line bg-surface px-3.5 py-2 whitespace-nowrap;
+  }
+  .btn:hover { @apply border-brand; }
+  .btn.primary { @apply border-brand bg-brand text-white; }
+  .btn.primary:hover { @apply bg-brand-hover; }
+  .btn.ghost { @apply border-transparent bg-transparent; }
+  .btn.danger { @apply text-danger; }
+  .btn.danger:hover { @apply border-danger; }
+  .btn.small { @apply px-[9px] py-1 text-label; }
+  .btn.active { @apply border-brand text-brand; }
+  .btn.icon-only { @apply px-2.5 py-2; }
+  .btn.icon-only .app-icon { @apply size-[18px]; }
+  .btn:disabled { @apply cursor-default opacity-50; }
+
+  .icon-btn {
+    @apply size-7 flex-none cursor-pointer rounded-md border border-transparent bg-transparent text-muted;
+  }
+  .icon-btn:hover:not(:disabled) { @apply bg-surface-2 text-fg; }
+  .icon-btn.danger:hover:not(:disabled) { @apply text-danger; }
+  .icon-btn:disabled { @apply cursor-default opacity-30; }
+  .icon-btn .app-icon { @apply size-[15px] align-middle; }
+
+  .app-icon { @apply size-4 flex-none; }
+
+  /* Bo'limga yozuv qo'shish: butun kenglikdagi shtrixli tugma, markazida "+" */
+  .add-btn {
+    @apply w-full cursor-pointer rounded-lg border-[1.5px] border-dashed border-line bg-transparent py-1.5 text-xl leading-none text-muted transition-colors;
+  }
+  .add-btn:hover { @apply border-brand bg-brand-faint text-brand; }
+  .add-btn:focus-visible { @apply outline-2 outline-offset-2 outline-brand; }
+
+  /* ---- Karta (forma bo'limi) ---- */
+  .card { @apply rounded-card border border-line bg-surface; }
+  .card-head { @apply flex items-center gap-1.5 px-2.5 py-2; }
+  .card-body { @apply flex flex-col gap-3 px-3.5 pt-1 pb-3.5; }
+
+  /* Bo'limni yig'ish/ochish tugmasi va strelka */
+  .collapse-btn { @apply flex cursor-pointer items-center gap-2 border-0 bg-transparent p-1 text-left; }
+  .chev { @apply inline-block w-3.5 text-lg text-muted transition-transform; }
+  /*
+   * transform bilan (rotate-90/translate-* utility emas): Tailwind 4 ularni alohida `rotate:`,
+   * `translate:` xususiyatlari bilan yozadi — Chrome 104 dan eski WebView (Android 8/9) ularni bilmaydi.
+   */
+  .chev.open { transform: rotate(90deg); }
+
+  /* Bo'lim sarlavhasi oddiy matndek ko'rinadi: hech qanday holatda chegara, chiziq yoki soya yo'q */
+  .title-input,
+  .title-input:hover,
+  .title-input:focus {
+    flex: 1;
+    padding-left: 4px !important;
+    font-size: 16px;
+    font-weight: 600;
+    background: transparent !important;
+    border: none !important;
+    outline: none;
+    box-shadow: none;
+    cursor: text;
+  }
+
+  /* ---- Maydonlar ---- */
+  .field { @apply flex flex-col gap-1; }
+  .field > span { @apply text-label text-muted; }
+  .check { @apply flex cursor-pointer items-center gap-2 pt-[18px]; }
+  .error { @apply mt-1 mb-0 text-xs text-danger; }
+
+  /* ---- Tahrirlanadigan maydon nomi: oddiy matndek, chegarasiz ---- */
+  .editable-label { @apply inline-grid max-w-full min-w-0 text-label text-muted; }
+  /* Ko'rinmas nusxa: input kengligini matnga tenglashtiradi */
+  .editable-label::after {
+    content: attr(data-value);
+    grid-area: 1 / 1;
+    visibility: hidden;
+    white-space: pre;
+    overflow: hidden;
+    font: inherit;
+    padding: 0 1px;
+  }
+  .editable-label > .field-label-input { grid-area: 1 / 1; min-width: 0; }
+  /* Ustun (flex-column) ichida cho'zilmasin — kenglik doim matnga teng */
+  .field > .editable-label { align-self: flex-start; }
+  .field-label-input,
+  .field-label-input:hover,
+  .field-label-input:focus {
+    /* Katakni to'liq egallaydi; katak kengligini ::after dagi nusxa belgilaydi */
+    width: 100% !important;
+    max-width: 100%;
+    padding: 0 1px !important;
+    font: inherit;
+    color: inherit;
+    background: transparent !important;
+    border: none !important;
+    outline: none;
+    box-shadow: none;
+    cursor: text;
+  }
+  .field-label-input:focus { color: var(--text); }
+  .check .editable-label { @apply text-sm text-fg; }
+  .field-label-input::placeholder { color: var(--muted); opacity: 0.5; }
+
+  /* ---- dd/mm/yyyy sana maydoni (DateInput, MonthInput, DateRangeInput) ---- */
+  .date-field { @apply relative w-[150px] flex-none; }
+  .date-field .date-text { padding-right: 34px !important; }
+  .date-field.invalid .date-text { border-color: var(--danger) !important; }
+  .date-field.date-range { @apply w-auto; }
+  .date-btn {
+    @apply absolute top-1/2 right-1 grid size-7 cursor-pointer place-items-center rounded-md border-0 bg-transparent p-0 text-muted;
+    transform: translateY(-50%);
+  }
+  .date-btn:hover:not(:disabled) { @apply bg-surface text-brand; }
+  .date-btn:disabled { @apply cursor-default opacity-40; }
+  .date-btn svg { @apply size-4; }
+  /* Kalendar shu joyda ochilishi uchun tugma ostida, lekin ko'rinmaydi */
+  .date-picker-native {
+    position: absolute;
+    right: 4px;
+    bottom: 0;
+    width: 1px !important;
+    height: 1px;
+    padding: 0 !important;
+    border: 0 !important;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* ---- Ikonkali maydon (FieldList): ikonka input ichida, chapda ---- */
+  .icon-input { @apply relative min-w-0; }
+  .icon-input > input { padding-left: 38px !important; }
+  /*
+   * Ko'p qatorli qiymat (textarea): chegara va fon o'ramda, textarea ikonkadan o'ngda.
+   * textarea'da yon tomonga surilgan matn chap padding ichiga ham kiradi va ikonka ostidan
+   * ko'rinib qolardi; ikonka joyi textarea'dan tashqarida bo'lsa, matn u yerga yetmaydi.
+   * `.value-text` klassini FieldList qo'yadi (:has() emas — Chrome 105+, eski WebView bilmaydi).
+   */
+  .icon-input.value-text {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface-2);
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .icon-input.value-text:focus-within { border-color: var(--brand); background: var(--surface); }
+  .icon-input > textarea {
+    width: calc(100% - 38px) !important;
+    margin-left: 38px;
+    padding-left: 0 !important;
+    border: 0 !important;
+    border-radius: 0 8px 8px 0 !important;
+    background: transparent !important;
+  }
+  /* Sana va tanlov turidagi qiymat (Tug'ilgan sana, Jinsi) — butun kenglikda, ikonka chapda */
+  .icon-input > select, .icon-input > .date-field .date-text { padding-left: 38px !important; }
+  .icon-input > select, .icon-input > .date-field { @apply w-full; }
+  /* Markazlash margin bilan (transform emas): transform ichidagi fixed oyna ekranga nisbatan joylashmaydi */
+  .icon-input > .icon-picker { @apply absolute top-1/2 left-1 z-1 -mt-3.5; }
+  /* Ko'p qatorli qiymat: ikonka birinchi qatorda qoladi */
+  .icon-input.value-text > .icon-picker { @apply top-1 left-[3px] mt-0; }
+  /* Ochiq panel qo'shni qatorlardagi tugmalar ustida turishi kerak */
+  .icon-input > .icon-picker.open { @apply z-40; }
+  /*
+   * Qiymat: yangi qator faqat Enter bilan. Uzun matn avtomatik o'ralmaydi — oddiy input kabi
+   * ichkariga suriladi (wrap="off"). Balandlik JS bilan qatorlar soniga moslanadi (v-auto-grow).
+   */
+  .extra-value { @apply block min-h-0 resize-none overflow-hidden whitespace-pre; }
+
+  /*
+   * ---- "Nom — qiymat" qatori: har doim yonma-yon. Nom va qiymat maydonlarida minimal kenglik
+   * (FieldList); ekran torlik qilsa ro'yxatning o'zi x bo'ylab aylanadi.
+   */
+  .extra-row { @apply flex items-start gap-1.5; }
+
+  /* ---- Haydovchilik guvohnomasi toifalari: yashirin checkbox, klaviatura fokusi — ramka ---- */
+  .license-cat > input:focus-visible + .focus-ring { @apply outline-2 outline-offset-1 outline-brand; }
+
+  /* ---- Havola oynasi: qatorning (.extra-item) markazida suzib chiqadi ---- */
+  .link-popover { transform: translate(-50%, -50%); animation: link-pop 0.12s ease-out; }
+  .link-popover input.invalid { border-color: var(--danger) !important; }
+
+  /* ---- Shablonlar oynasi (native <dialog>) ---- */
+  .tpl-dialog::backdrop { background: rgba(12, 18, 28, 0.55); backdrop-filter: blur(2px); }
+  .tpl-dialog[open] { display: flex; animation: tpl-in 0.16s ease-out; }
+  .tpl-card:hover .tpl-thumb { @apply border-brand-half shadow-[0_8px_20px_rgba(15,25,40,0.12)]; transform: translateY(-3px); }
+  .tpl-card.active .tpl-thumb { @apply border-brand ring-3 ring-brand-line; }
+  .tpl-card:focus-visible .tpl-thumb { @apply outline-2 outline-offset-3 outline-brand; }
+
+  /* ---- Pastdan chiqadigan oyna (ExportSheet): transform bilan, eski WebView ham tushunadi ---- */
+  .export-sheet-panel { animation: sheet-up 0.2s ease-out; }
+  .export-sheet-backdrop { animation: fade-in 0.2s ease-out; }
+
+  /* ---- JSON ko'rinishi: sintaksis ranglari ---- */
+  .j-key { color: #8a2f9a; }
+  .j-string { color: #1f7a3f; }
+  .j-number { color: #b8651b; }
+  .j-literal { color: #2f6fed; font-weight: 600; }
+  .j-punct { color: var(--muted); }
+  @media (prefers-color-scheme: dark) {
+    .j-key { color: #d79bf0; }
+    .j-string { color: #8fd6a4; }
+    .j-number { color: #f0b073; }
+    .j-literal { color: #8fb5ff; }
+  }
+
+  /*
+   * Variantli qoidalar alohida blokda: @apply ichidagi variant (phone:, pointer-coarse:...) dev
+   * rejimda qoida ichiga ichma-ich (CSS nesting) chiqadi. Chrome 112 dan eski WebView (Android 8/9)
+   * uni tushunmaydi va ichki blokdan keyingi xususiyatlarni ham tashlab yuboradi.
+   * Qoida: app.css da @apply ichida variant ishlatilmaydi — shu kabi @variant bloki yoziladi.
+   */
+  @variant pointer-coarse {
+    .icon-btn { @apply size-[34px]; }
+  }
+  @variant phone {
+    .card-body { @apply px-2.5 pb-3; }
+    .date-field { @apply w-full; }
+  }
+  @variant narrow {
+    .preview-hidden .editor-col { @apply max-w-none; }
+  }
+
+  /* ================= Muharrir tuzilmasi ================= */
+  /*
+   * Ustunlar CSS'da (utility emas): quyidagi holat qoidalari (.preview-hidden, .m-edit, .m-preview)
+   * ularni o'zgartiradi, utility esa layer tartibida doim ustun bo'lib, ularni bosib qo'yardi.
+   */
+  .editor-body {
+    display: grid;
+    flex: 1;
+    min-height: 0;
+    grid-template-columns: minmax(380px, 1fr) minmax(360px, 1fr);
+  }
+  .editor-col { display: flex; flex-direction: column; min-height: 0; min-width: 0; }
+  .preview-pane {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    background: var(--surface-2);
+    border-left: 1px solid var(--border);
+  }
+
+  /* Preview yashirilsa forma to'liq kenglikda, keng ekranda markazda */
+  .editor-body.preview-hidden { grid-template-columns: 1fr; }
+  .preview-hidden .editor-col { @apply mx-auto w-full max-w-[960px]; }
+  /* display: none emas — sahifalash preview yashirin bo'lsa ham o'lchay olishi kerak */
+  .preview-hidden .preview-pane {
+    position: fixed;
+    top: 0;
+    left: -10000px;
+    width: 50vw;
+    height: 100vh;
+    visibility: hidden;
+  }
+
+  /*
+   * Tor ekran: forma va preview pastdagi tablar (ui store: mobileTab) bilan almashadi.
+   * Forma tabida preview ekrandan tashqarida (sahifalash o'lchay olishi uchun).
+   */
+  @variant narrow {
+    .editor-body, .editor-body.preview-hidden { grid-template-columns: minmax(0, 1fr); }
+    .m-edit .preview-pane {
+      position: fixed;
+      top: 0;
+      left: -10000px;
+      width: 100vw;
+      height: 100vh;
+      visibility: hidden;
+    }
+    .m-preview .editor-col { display: none; }
+    /* Preview tabi: desktopda preview yashirilgan bo'lsa ham ko'rinadi */
+    .m-preview .preview-pane,
+    .m-preview.preview-hidden .preview-pane {
+      position: relative;
+      left: auto;
+      width: auto;
+      height: auto;
+      visibility: visible;
+      border-left: none;
+    }
+  }
+}
+
+/* Oyna markazlash ham transform'da (.link-popover), shuning uchun animatsiya uni to'liq almashtiradi */
+@keyframes link-pop { from { opacity: 0; transform: translate(-50%, -46%) scale(0.97); } }
+@keyframes sheet-up { from { transform: translateY(100%); } }
+@keyframes fade-in { from { opacity: 0; } }
+@keyframes tpl-in { from { opacity: 0; transform: translateY(8px) scale(0.98); } }
+
+/*
+ * Layer'siz: preview.css elementlariga (.preview-scroll) tegadigan ilova qoidalari. preview.css
+ * layer'siz, shuning uchun layer ichidagi qoida uni bosib o'tolmaydi.
+ */
+.preview-scroll.is-offscreen {
+  position: absolute;
+  top: 0;
+  left: -10000px;
+  width: 100%;
+  visibility: hidden;
+}
+@media screen and (max-width: 900px) {
+  .preview-pane > .preview-scroll { padding: 12px 10px; }
+}
+
+/*
+ * Utility klasslar — fayl OXIRIDA (boshida @import qilinmaydi). Qatlamlar tartibi yuqorida e'lon
+ * qilingan (theme, base, components, utilities), lekin Chrome 101 (Android 8/9 WebView) bloklar
+ * faylda kelgan tartibga qaraydi: utilities boshida bo'lsa, components va base undan ustun chiqib,
+ * `min-w-[256px]`, `px-*` kabi utility'lar ishlamay qoladi. Oxirida bo'lsa, ikkala holatda ham to'g'ri.
+ */
+@layer utilities {
+  @tailwind utilities;
+}

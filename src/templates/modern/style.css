@@ -1,0 +1,28 @@
+/* "Zamonaviy" shabloni: faqat .tpl-modern ostidagi qoidalar (umumiy asos — styles/preview.css) */
+.tpl-modern { --side-width: 32%; }
+.tpl-modern .pv-header { background: var(--accent); color: #fff; padding: 11mm 12mm 10mm; }
+.tpl-modern .pv-header .pv-photo { width: 28mm; height: 28mm; border: 3px solid rgba(255, 255, 255, 0.6); }
+.tpl-modern .pv-name { font-size: 26pt; letter-spacing: -0.3px; }
+.tpl-modern .pv-job { opacity: 0.9; }
+.tpl-modern .pv-side { background: #f3f5f8; background: color-mix(in srgb, var(--accent) 8%, #fff); padding: 10mm 7mm; }
+.tpl-modern .pv-main { padding: 10mm 10mm; }
+.tpl-modern .pv-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: none;
+  font-size: 10.5pt;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.tpl-modern .pv-title::before {
+  content: "";
+  flex: none;
+  width: 14px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--accent);
+}
+
+/* Rangli sarlavhada ko'k havola o'qilmaydi — matn rangi qoladi */
+.tpl-modern .pv-header a { color: inherit; }
